@@ -1,5 +1,6 @@
 # Big SEAN
-from decimal import Decimal # circumvent float math
+import pandas as pd
+from decimal import Decimal
 class Accounting:
     """
     Class representing mathematical operations
@@ -12,35 +13,37 @@ class Accounting:
     """
     pass
 
-    def add(self, val1, val2):
+    def get_total_balance(self, name):
         """
-        Adds two monetary values
-        """
-
-        pass
-    def subtract(self, val1, val2):
-        """
-        Subtracts two monetary values
+        Returns the total balance name owes
         """
 
-        pass
-
-    def percent(self, val, percent):
+    def get_balance(self, name, id):
         """
-        Gets percentage of a monetary value
+        Returns the balance name owes on 'id'
         """
 
-    def toDecimal(self, val):
+    def pay_balance(self, name, id):
         """
-        Converts float to decimal value
-        """
-
-    def toFloat(self, val):
-        """
-        Converts decimal to float value, might be unused
+        Sets the balance name owes on 'id' to zero
         """
 
-    def sum(self, vals):
+    def pay_partial_balance(self, name, id, amount_paid):
         """
-        Sums some amount of monetary values
+        Sets the balance name owes on 'id' to (balance - amount_paid)
+        """
+
+    def set_balance_unpaid(self, name, id):
+        """
+        Resets the balance name owes on 'id' to its original balance
+        """
+
+    def get_user_balances(self, name):
+        """
+        Returns summary of balances owed/debted for 'name'
+        """
+
+    def get_balance_details(self, id):
+        """
+        Returns details of balance 'id'
         """
