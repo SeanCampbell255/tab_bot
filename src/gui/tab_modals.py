@@ -1,6 +1,8 @@
 from typing import Dict, List
 import discord
-from src.db.db import DBConnector   
+from src.db.db import DBConnector
+
+# add accounting, utils(DRY) classes, logic in processor override in subsequent modals
 
 class DefaultButton(discord.ui.Button):
     def __init__(self, label):

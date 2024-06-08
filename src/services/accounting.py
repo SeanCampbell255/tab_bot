@@ -23,21 +23,6 @@ class Accounting:
         Returns the balance name owes on 'id'
         """
 
-    def pay_balance(self, name, id):
-        """
-        Sets the balance name owes on 'id' to zero
-        """
-
-    def pay_partial_balance(self, name, id, amount_paid):
-        """
-        Sets the balance name owes on 'id' to (balance - amount_paid)
-        """
-
-    def set_balance_unpaid(self, name, id):
-        """
-        Resets the balance name owes on 'id' to its original balance
-        """
-
     def get_user_balances(self, name):
         """
         Returns summary of balances owed/debted for 'name'
@@ -46,4 +31,22 @@ class Accounting:
     def get_balance_details(self, id):
         """
         Returns details of balance 'id'
+        """
+
+    def pay_balance(self, name, id):
+        """
+        Sets the balance name owes on 'id' to zero
+        -also log into resultant db
+        """
+
+    def pay_partial_balance(self, name, id, amount_paid):
+        """
+        Sets the balance name owes on 'id' to (balance - amount_paid)
+        -also log into resultant db
+        """
+
+    def set_balance_unpaid(self, name, id):
+        """
+        Resets the balance name owes on 'id' to its original balance
+        -also log into resultant db
         """
