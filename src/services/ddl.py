@@ -1,11 +1,8 @@
    
 CREATE_USER_TABLE_SQL = """
 CREATE TABLE IF NOT EXISTS USERS(
-    user_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    user_id INTEGER PRIMARY KEY, 
     name TEXT, 
-    birthday TEXT,
-    preferred_payment_method TEXT,
-    default_split_percentage REAL DEFAULT 0,
     insert_date TEXT
     )
 """

@@ -4,30 +4,17 @@ import discord
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 
-class ProcessorSelector():
-    """
-    Factory class to select event processor
-    """
-    def __init__(self, event_type: str) -> None:
-        self.event_type = event_type
-        
-    def get_event_processor(self):
-        processor = {
-            "MEMBER": MemberProcessor
-        }
-
-        processor: Processor = processor.get(self.event_type)
-        return processor
+from src.services.db import DBConnector
 
 class Processor(ABC):
     """
     Event Processor base class
     """
-    def __init__(self, sub_type: str, ctx: discord.ApplicationContext, event = None) -> None:
-        self.sub_type = sub_type
+    def __init__(self, ctx = None, event:dict = None) -> None:
         self.ctx = ctx
         self.event = event
-
+        self.db = DBConnector()
+        
     @abstractmethod
     def process(self):
         pass
@@ -36,11 +23,10 @@ class MemberProcessor(Processor):
     """
     Member Processor class
     """
-    def __init__(self, event, ctx) -> None:
+    def __init__(self, event, ctx = None) -> None:
         super().__init__(event, ctx)
-        
     
-    def process(self, event):
+    def process(self):
         event_type = {
             "ADD": self.add_member,
             "REMOVE": self.remove_member,
@@ -48,8 +34,8 @@ class MemberProcessor(Processor):
             "GET": self.get_members
         }
         
-        processor = event_type.get(self.sub_type)
-        processor(event)
+        processor = event_type.get(self.event.get("sub_type"))
+        processor()
 
     def add_member(self):
         pass
@@ -58,7 +44,9 @@ class MemberProcessor(Processor):
         pass
 
     def refresh_members(self):
-        pass
+        self.db.clear_users()
+        self.db.insert_users(self.event.get("body"))
+        
 
     def get_members(self):
         pass

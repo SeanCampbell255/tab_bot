@@ -1,9 +1,11 @@
 import discord
 from src.gui.select import EmojiSelect
+from src.services.db import DBConnector
 
 class BaseView(discord.ui.View):
     def __init__(self, author=None):
         self.author = author
+        self.db = DBConnector()
         super().__init__()
     
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
@@ -20,3 +22,10 @@ class EmojiSelector(BaseView):
         super().__init__(author)
         self.select = EmojiSelect(emojis=emojis, follow_up_item = follow_up_item)
         self.add_item(self.select)
+
+class TabSelector(BaseView):
+    def __init__(self, user_id, author=None):
+        super().__init__()
+    
+    def get_user_tabs(self):
+        pass

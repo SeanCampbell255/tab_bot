@@ -1,5 +1,6 @@
 import pandas as pd
-import common.env as env   
+import common.env as env 
+import common.utils as utils  
 import os
 import sqlite3
 from datetime import datetime as dt
@@ -172,8 +173,50 @@ class DBConnector():
             except Exception as e:
                 print(str(e))
                 raise 
+    
+    def clear_users(self):
+        query = """
+        DELETE FROM USERS;
+        """
+        try:
+            self.cur.execute(query)
+            print(f"Users Cleared!")
+        except Exception as e:
+            print(str(e))
+            raise
+        
+    def insert_users(self, users):
+        values = []
+        fstring ="""
+                (
+                {user_id}, {name},{insert_date}
+                )
+                """
+        for user in users:
+            _val = fstring.format(user_id=user.get("user_id"), name=user.get("name"), insert_date=user.get("insert_date"))
+            values.append(_val)
+        
+        values_str = " ,".join(values)
 
-    def get_payments_by_user():
+        query = f"""
+        INSERT INTO USERS(
+            user_id, 
+            name, 
+            insert_date
+                )
+        VALUES
+        {values_str}
+        """
+        try:
+            self.cur.execute(query)
+            print(f"Users Inserted!")
+        except Exception as e:
+            print(str(e))
+            raise
+
+
+
+    def get_payments_by_user(self, user_id):
         pass
 
     def log_to_db(self, table_name, event):

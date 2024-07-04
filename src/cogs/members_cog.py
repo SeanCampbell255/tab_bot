@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
-from processors.command_processors.member_processor import Processor, ProcessorSelector
+from datetime import datetime as dt
+from processors.command_processors.member_processor import MemberProcessor, Processor
 
 class MembersCog(commands.Cog): 
     """
@@ -15,22 +16,44 @@ class MembersCog(commands.Cog):
         self.bot = bot
     
     @commands.Cog.listener()
-    async def on_member_join(member):
-        event = {"type":"MEMBER", "sub_type": "ADD", "body": member.mention}
-        eventprocessor: Processor = ProcessorSelector(event["type"]).get_event_processor(event["sub_type"], None)
-        eventprocessor.process(member.mention)
+    async def on_member_join(member: discord.Member):
+        members = [
+            {
+                "user_id": member.id,
+                "name": member.name,
+                "insert_date": dt.isoformat(member.created_at)
+            }
+        ]
+        event = {"type":"MEMBER", "sub_type": "ADD", "body": members}
+        eventprocessor: Processor = MemberProcessor(event) 
+        eventprocessor.process()
 
     @commands.Cog.listener()
-    async def on_member_remove(member):
-        event = {"type":"MEMBER", "sub_type": "REMOVE", "body": member.mention}
-        eventprocessor: Processor = ProcessorSelector(event["type"]).get_event_processor(event["sub_type"], None)
-        eventprocessor.process(member.mention)
+    async def on_member_remove(member: discord.Member):
+        members = [
+            {
+                "user_id": member.id,
+                "name": member.name,
+                "insert_date": dt.isoformat(member.created_at)
+            }
+        ]
+        event = {"type":"MEMBER", "sub_type": "REMOVE", "body": members}
+        eventprocessor: Processor = MemberProcessor(event) 
+        eventprocessor.process()
     
     @commands.Cog.listener()
-    async def on_ready(member, ctx):
-        event = {"type":"MEMBER", "sub_type": "REFRESH", "body": member.mention}
-        eventprocessor: Processor = ProcessorSelector(event["type"]).get_event_processor(event["sub_type"], ctx)
-        eventprocessor.process(member.mention)
+    async def on_ready(self):
+        members = [
+            {
+                "user_id": member.id,
+                "name": member.name,
+                "insert_date": dt.isoformat(member.created_at)
+            }
+            for member in self.bot.get_all_members()
+        ]
+        event = {"type":"MEMBER", "sub_type": "REFRESH", "body": members}
+        eventprocessor: Processor = MemberProcessor(event) 
+        eventprocessor.process()
 
 
 def setup(bot: discord.Bot): # this is called by Pycord to setup the cog
