@@ -28,6 +28,18 @@ class PaymentService:
                     }
                     self.make_payment(_event)
                     overpayment_amount = overpayment_amount - amount_remaining
+                else:
+                    _event = {
+                    "tab_id": tab.get("tab_id"),
+                    "user_id": tab.get("user_id"),
+                    "amount": overpayment_amount,
+                    "date": dt.isoformat(dt.now())
+                    }
+                    self.make_payment(_event)
+                    overpayment_amount = 0
+                    print("All old tabs have been paid off.")
+                    
+
         if overpayment_amount > 0:
             _event = {
                 "tab_id": payment_status.get("tab_id"),
@@ -39,7 +51,6 @@ class PaymentService:
 
     def process_payment_event(self, event: dict):
         payment_status = self.make_payment(event)
-        print(payment_status)
         if payment_status.get("over_paid"):
             self.process_overpayment(payment_status)
             
